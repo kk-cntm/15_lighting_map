@@ -3,7 +3,9 @@
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
+    sampler2D emission;
     float shininess;
+    sampler2D emissionMap;
 };
 
 struct Light {
@@ -35,13 +37,15 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(LightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = light.diffuse * (diff * vec3(texture(material.diffuse, TexPos)));
+    vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexPos).rgb;
     
     vec3 viewDir = normalize(-FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = light.specular * (spec * vec3(texture(material.specular, TexPos)));
+    vec3 specular = light.specular * spec * texture(material.specular, TexPos).rgb;
+    
+    vec3 emission = texture(material.emission, TexPos).rgb * texture(material.emissionMap, TexPos).rgb;
             
-    vec3 result = ambient + diffuse + specular;
+    vec3 result = ambient + diffuse + specular + emission;
     FragColor = vec4(result, 1.0);
 }

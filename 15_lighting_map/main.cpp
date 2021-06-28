@@ -227,6 +227,8 @@ int main(int argc, const char * argv[]) {
     
     Texture boxTexture("./assets/container2.png", Texture::png);
     Texture boxSpecTex("./assets/container2_specular.png", Texture::png);
+    Texture boxEmission("./assets/matrix.jpg", Texture::jpg);
+    Texture boxEmissionMap("./assets/emission_map.jpg", Texture::jpg);
     
     Shader cubeProgram("./shaders/cube-vs.glsl", "./shaders/cube-fs.glsl");
     Shader lightProgram("./shaders/light-vs.glsl", "./shaders/light-fs.glsl");
@@ -268,6 +270,8 @@ int main(int argc, const char * argv[]) {
         cubeProgram.setValue("lightColor", glm::vec3(1.0f));
         cubeProgram.setValue("material.diffuse", 0);
         cubeProgram.setValue("material.specular", 1);
+        cubeProgram.setValue("material.emission", 2);
+        cubeProgram.setValue("material.emissionMap", 3);
         cubeProgram.setValue("material.shininess", 32.0f);
         cubeProgram.setValue("lightPos", lightPosition);
         cubeProgram.setValue("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
@@ -276,6 +280,8 @@ int main(int argc, const char * argv[]) {
         
         boxTexture.bind(GL_TEXTURE0);
         boxSpecTex.bind(GL_TEXTURE1);
+        boxEmission.bind(GL_TEXTURE2);
+        boxEmissionMap.bind(GL_TEXTURE3);
         
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
