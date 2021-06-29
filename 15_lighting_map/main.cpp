@@ -197,7 +197,7 @@ int main(int argc, const char * argv[]) {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
     
-    glm::vec3 cubePosition(0.0f,  0.0f, 0.0f);
+    glm::vec3 cubePosition(0.0f, 0.0f, 0.0f);
     glm::vec3 lightPosition(1.2f, 0.0f, 2.0f);
     
     unsigned int VAO, VBO, lightVAO;
@@ -252,20 +252,20 @@ int main(int argc, const char * argv[]) {
 
         glClearColor(0.14f, 0.14f, 0.14f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, cubePosition);
 
         glm::mat4 view = camera.view();
         
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(fov), (float)width / (float)height, 0.1f, 100.0f);
         
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, cubePosition);
-        
         cubeProgram.use();
         
+        cubeProgram.setValue("model", model);
         cubeProgram.setValue("view", view);
         cubeProgram.setValue("projection", projection);
-        cubeProgram.setValue("model", model);
         cubeProgram.setValue("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
         cubeProgram.setValue("lightColor", glm::vec3(1.0f));
         cubeProgram.setValue("material.diffuse", 0);
@@ -285,7 +285,7 @@ int main(int argc, const char * argv[]) {
         
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        
+
         lightProgram.use();
         
         model = glm::mat4(1.0f);
